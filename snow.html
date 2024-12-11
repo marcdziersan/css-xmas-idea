@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weihnachtslichter und Schnee</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0b0123;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.4);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            border-radius: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            z-index: 1;
+        }
+
+        .lights {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .light {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            animation: blink 1s infinite alternate;
+            filter: blur(5px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            animation: snow 5s linear infinite;
+            filter: blur(1px);
+        }
+
+        @keyframes snow {
+            0% {
+                top: -10px;
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        .snowfall {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .poem {
+            font-size: 1.5em;
+            margin-top: 40px;
+            line-height: 1.6;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="poem">
+            <p><strong>Knecht Ruprecht</strong></p>
+            <p>Von drauß vom Walde komm' ich her;</p>
+            <p>Ich muß euch sagen, es weihnachtet sehr!</p>
+            <p>Allüberall auf den Tannenspitzen</p>
+            <p>Sah ich goldene Lichtlein sitzen;</p>
+            <p>Und droben aus dem Himmelstor</p>
+            <p>Sah mit großen Augen das Christkind hervor,</p>
+            <p>Und wie ich so strolcht' durch den finstern Tann,</p>
+            <p>Da rief's mich mit heller Stimme an:</p>
+            <p>"Knecht Ruprecht", rief es, "alter Gesell,</p>
+            <p>Hebe die Beine und spute dich schnell!</p>
+            <p>Die Kerzen fangen zu brennen an,</p>
+            <p>Das Himmelstor ist aufgetan,</p>
+            <p>Alt' und Junge sollen nun</p>
+            <p>Von der Jagd des Lebens ruhn;</p>
+            <p>Und morgen flieg' ich hinab zur Erden,</p>
+            <p>Denn es soll wieder Weihnachten werden!"</p>
+            <p>Ich sprach: "O lieber Herre Christ,</p>
+            <p>Meine Reise fast zu Ende ist;</p>
+            <p>Ich soll nur noch in diese Stadt,</p>
+            <p>Wo's eitel gute Kinder hat." –</p>
+            <p>"Hast denn das Säcklein auch bei dir?"</p>
+            <p>Ich sprach: "Das Säcklein, das ist hier;</p>
+            <p>Denn Äpfel, Nuß und Mandelkern</p>
+            <p>Essen fromme Kinder gern." –</p>
+            <p>"Hast denn die Rute auch bei dir?"</p>
+            <p>Ich sprach: "Die Rute, die ist hier;</p>
+            <p>Doch für die Kinder nur, die schlechten,</p>
+            <p>Die trifft sie auf den Teil, den rechten."</p>
+            <p>Christkindlein sprach: "So ist es recht;</p>
+            <p>So geh mit Gott, mein treuer Knecht!"</p>
+            <p>Von drauß vom Walde komm' ich her;</p>
+            <p>Ich muß euch sagen, es weihnachtet sehr!</p>
+            <p>Nun sprecht, wie ich's hierinnen find'!</p>
+            <p>Sind's gute Kind, sind's böse Kind?</p>
+            <p><em>Ein Gedicht von Theodor Storm (1817-1888)</em></p>
+        </div>
+    </div>
+
+    <div class="snowfall" id="snowfall"></div>
+
+    <div class="lights" id="lights"></div>
+
+    <script>
+        // Schneeflocken erzeugen
+        function generateSnowflakes() {
+            const snowfall = document.getElementById('snowfall');
+            const numberOfSnowflakes = 100;
+
+            for (let i = 0; i < numberOfSnowflakes; i++) {
+                let snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowfall.appendChild(snowflake);
+            }
+        }
+
+        // Weihnachtslichter erzeugen
+        function generateLights() {
+            const lightsContainer = document.getElementById('lights');
+            const numberOfLights = 50;
+            const colors = ['red', 'green', 'blue', 'yellow', 'purple'];
+
+            // Anordnung der Lichter
+            const lightPositions = [];
+
+            // Berechne Positionen für die Lichter (50 Lichter an 4 Seiten verteilen)
+            for (let i = 0; i < numberOfLights; i++) {
+                const light = document.createElement('div');
+                light.classList.add('light');
+                light.style.backgroundColor = colors[i % colors.length];
+
+                // Zufällige Animation-Verzögerung hinzufügen
+                const animationDelay = Math.random() * 1 + 's'; // Jeder Licht bekommt eine zufällige Verzögerung
+
+                light.style.animationDelay = animationDelay; // Verzögerung setzen
+
+                if (i < numberOfLights / 4) { // Oben
+                    light.style.top = 0;
+                    light.style.left = (i / (numberOfLights / 4)) * 100 + '%';
+                } else if (i < numberOfLights / 2) { // Rechts
+                    light.style.top = ((i - numberOfLights / 4) / (numberOfLights / 4)) * 100 + '%';
+                    light.style.right = 0;
+                } else if (i < 3 * numberOfLights / 4) { // Unten
+                    light.style.bottom = 0;
+                    light.style.left = ((i - numberOfLights / 2) / (numberOfLights / 4)) * 100 + '%';
+                } else { // Links
+                    light.style.top = ((i - 3 * numberOfLights / 4) / (numberOfLights / 4)) * 100 + '%';
+                    light.style.left = 0;
+                }
+
+                lightsContainer.appendChild(light);
+            }
+        }
+
+        // Funktionen ausführen
+        generateSnowflakes();
+        generateLights();
+    </script>
+
+</body>
+</html>
